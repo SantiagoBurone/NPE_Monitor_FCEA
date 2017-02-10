@@ -2,6 +2,7 @@
 #################Monitor de actividades estudiantiles NPE 2012 FCEA##################
 #####################################################################################
 
+
 #######Introduccion
 
 Este repositorio guarda las sintaxis e instrucciones para el compilado y actualizado de la base de datos del Monitor de Actividades Estudiantiles del NPE FCEA-UdelaR.
@@ -24,7 +25,35 @@ Incluye actividades de inscriptos a las 3 carreras principales en el periodo Ene
 Incluye información de los formularios estadísticos de ingreso. 
 Incluye datos filiatorios de los estudiantes.
 Incluye información de los institutos de educacion secundaria de procedencia.
-Incluye 
+Incluye información sobre los egresos en estas carreras.
+
+
+
+
+
+    Monitor de actividades estudiantiles NPE 2012 FCEA
+    Copyright (C) 2017 Mathias Silva
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+
+
+
+
+
+
 
 
 
