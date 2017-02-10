@@ -1,0 +1,12 @@
+1)Bajar las g_asig, g_inscriptos, g_datosgen, g_egre_anio, g_actividades_de_una_gen y g_genactual. Conseguir de Cursos Practicos la version actualizada de los creditos por materia.
+2)Convertirlas (para creditos por materia se usa "creditos materias fcea.r")
+3)Actualizar y correr "Filtrado y matcheado de bases.r"
+4)Actualizar y correr "resumen por estudiante.r"
+5)Actualizar y correr "monitor paso 1.r"
+6)Actualizar y correr "pegado de form y act.r"
+7)Actualizar y correr "compatibilizado de bases con forms.r"
+8)Actualizar y correr "pegado bases post festad con datosgen.r"
+9)Actualizar y correr "pegado creditos a base post festad con datosgen.r"
+10)Actualizar y correr "pegado datos institutos a base post festad con datosgen concreds.r" 
+11)Actualizar y correr "pegado egresos a base post festad con datosgen concreds coninst.r"
+12)Actualizar y correr "fusionador final.r"
