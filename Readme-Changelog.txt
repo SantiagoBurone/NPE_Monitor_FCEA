@@ -27,10 +27,16 @@ Incluye datos filiatorios de los estudiantes.
 Incluye información de los institutos de educacion secundaria de procedencia.
 Incluye información sobre los egresos en estas carreras.
 
+Version Control (R):
+R version 3.3.1 (2016-06-21)
+Platform: i386-w64-mingw32/i386 (32-bit)
+Running under: Windows 7 x64 (build 7601) Service Pack 1
 
+Version Control (libraries):
+plyr_1.8.4
+foreign_0.8-66
 
-
-
+#####################################################################################
     Monitor de actividades estudiantiles NPE 2012 FCEA
     Copyright (C) 2017 Mathias Silva
 
@@ -46,7 +52,7 @@ Incluye información sobre los egresos en estas carreras.
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+#####################################################################################
 
 
 
