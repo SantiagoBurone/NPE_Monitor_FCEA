@@ -6,7 +6,9 @@
 #######Introduccion
 
 Este repositorio guarda las sintaxis e instrucciones para el compilado y actualizado de la base de datos del Monitor de Actividades Estudiantiles del NPE FCEA-UdelaR.
-El procedimiento está programado en el software estadístico R*, y NINGUNA BASE DE DATOS SERÁ ALOJADA EN ESTE REPOSITORIO. El cometido del mismo es el de compartir y colaborar 
+El procedimiento está programado en el software estadístico R*.
+
+NINGUNA BASE DE DATOS SERÁ ALOJADA EN ESTE REPOSITORIO. El cometido del mismo es el de compartir y colaborar 
 con el procedimiento utilizado para el compilado y armado de esta base de datos.
 
 
