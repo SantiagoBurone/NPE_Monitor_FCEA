@@ -2,7 +2,7 @@ directorio<-"C:\\Users\\areasocial\\Documents\\Mesareasocial\\Mesareasocial\\Con
 setwd(directorio)
 library(foreign)
 library(memisc)
-#Primer Paso: Abrir el archivo .LST, eliminar la última línea y las primeras hasta los nombres de las variables y -- exclusive. Guardar como .txt.
+#Primer Paso: Abrir el archivo .LST, eliminar la Ãºltima lÃ­nea y las primeras hasta los nombres de las variables y -- exclusive. Guardar como .txt.
 #Segundo Paso: Idem al paso 1 pero eliminar tambien los nombres de las variables y los --- divisorios. Guardar como .csv#
 #NOTA: Caracteres como numeral (#) generan problemas al cargado de la base. Eliminarlos del archivo fuente antes de hacer la conversion
 base<-read.table("g_egre_anio_2010_2016.txt", sep=";", quote="\"", na.strings="",header=F)
@@ -15,3 +15,4 @@ colnames(base)<-c("NOMBRE","ANO_EGRESO","CARRERA","CICLO","S","LUGAR_NACIMIENTO"
 for(i in 1:ncol(base)){
   base[,i]<-sapply(as.character(base[,i]),trimws)
 }
+write.csv(base,"g_egre_anio_2012_2017_conv")
