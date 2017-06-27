@@ -374,7 +374,107 @@ gen2015$result_act[which(gen2015$mat=="UPC" | gen2015$mat=="UPC10" | gen2015$mat
 gen2015$n_estud<-as.factor(gen2015$ci)
 levels(gen2015$n_estud)<-seq(1:length(levels(gen2015$n_estud)))
 write.csv(gen2015[which(duplicated(gen2015[,c("ci","mat","fecha","result_act")])==F),],"gen2015_sindup.csv")
+##########################################
+rm(list=ls())
+gc()
+directorio<-"C:\\Users\\msilva\\Documents\\Mathias\\Bases\\Bases\\FCEA\\Actividades actualizadas\\Nuevas para actualizar"
+setwd(directorio)
+load("cohortes2.RData")
+library(plyr)
 
+#Ejemplo: Estudiante economista (puro o parcial) de gen2016#
+#Cargo la base de actividades de la gen2016#
+gen2016<-listadobases[[1]]
+gen2016<-gen2016[which(gen2016$ecopuro12==1 | gen2016$ecocont12==1 | gen2016$ecoadm12==1 | gen2016$todas12==1 | gen2016$contpuro12==1 | gen2016$admpuro12==1 | gen2016$contadm12==1),]
+
+#Fecha de fin semestre (sin incluir revalidas sin nota):
+#Fecha del fin del 1er semestre: (20160804)
+sort(levels(as.factor(gen2016$fecha[which(gen2016$fecha<20170101 & gen2016$nota!=20)])))
+#Fecha del fin del 2do semestre (incluyendo verano 2017): (20170309)
+sort(levels(as.factor(gen2016$fecha[which(gen2016$fecha<20170601 & gen2016$fecha>20160804 & gen2016$nota!=20)])))
+#Fecha del fin del 3er semestre: (20170803)
+sort(levels(as.factor(gen2016$fecha[which(gen2016$fecha<20171001 & gen2016$fecha>20170309 & gen2016$nota!=20)])))
+#Fecha del fin del 4to semestre (incluyendo verano 2014): (20140620)
+sort(levels(as.factor(gen2016$fecha[which(gen2016$fecha<20140701 & gen2016$fecha>20170803 & gen2016$nota!=20)])))
+#Fecha del fin del 5to semestre: (20140804)
+sort(levels(as.factor(gen2016$fecha[which(gen2016$fecha<20140931 & gen2016$fecha>20140620 & gen2016$nota!=20)])))
+#Fecha del fin del 6to semestre (incluyendo verano 2015): (20150523)
+sort(levels(as.factor(gen2016$fecha[which(gen2016$fecha<20150701 & gen2016$fecha>20140804 & gen2016$nota!=20)])))
+#Fecha del fin del 7mo semestre: (20150808)
+sort(levels(as.factor(gen2016$fecha[which(gen2016$fecha<20151001 & gen2016$fecha>20150523 & gen2016$nota!=20)])))
+#Fecha del fin del 8vo semestre (incluyendo verano 2016): (20160528)
+sort(levels(as.factor(gen2016$fecha[which(gen2016$fecha<20160806 & gen2016$fecha>20150808 & gen2016$nota!=20)])))
+#Fecha del fin del 9no semestre: (20160806)
+
+#Identificador de semestre:
+gen2016$sem_gen2016<-ifelse(gen2016$fecha<=20160804,1,
+						ifelse(gen2016$fecha<=20170309 & gen2016$fecha>20160804,2,
+							ifelse(gen2016$fecha<=20170803 & gen2016$fecha>20170309,3,
+								ifelse(gen2016$fecha<20140620 & gen2016$fecha>20170803,4,
+									ifelse(gen2016$fecha<=20140804 & gen2016$fecha>20140620,5,
+										ifelse(gen2016$fecha<=20150523 & gen2016$fecha>20140804,6,
+											ifelse(gen2016$fecha<=20150808 & gen2016$fecha>20150523,7,
+												ifelse(gen2016$fecha<=20160528 & gen2016$fecha>20150808 ,8,
+													ifelse(gen2016$fecha<=20160806 & gen2016$fecha>20160528 ,9,10)))))))))
+										
+#Hay que no tener en cuenta las actividades en posgrados
+#Elimino las actividades en posgrados (restringir la base a actividades relacionadas a alguna de las 4 licenciaturas o la TUA)
+#table(gen2016$carr)#
+asig<-read.csv("C:\\Users\\msilva\\Documents\\Mathias\\Bases\\Bases\\FCEA\\CCEE\\g_asig\\g_asig_conv.csv")
+ind1<-levels(as.factor(asig$MAT))
+restr<-rep(0,length(ind1))
+for(i in 1:length(ind1)){
+restr[i]<-ifelse(11%in%asig$CARR[which(asig$MAT==ind1[i])] | 12%in%asig$CARR[which(asig$MAT==ind1[i])] | 14%in%asig$CARR[which(asig$MAT==ind1[i])] | 2%in%asig$CARR[which(asig$MAT==ind1[i])] | 3%in%asig$CARR[which(asig$MAT==ind1[i])],1,0)
+}
+for(i in 1:nrow(asig)){
+asig$r[i]<-ifelse(restr[which(asig$MAT[i]==ind1)]==1,1,0)
+}
+colnames(asig)[2]<-"mat"
+gen2016<-join_all(list(gen2016,asig),by=c("mat"))
+gen2016<-gen2016[which(gen2016$r==1),c("ci","NOMBRE","carr","ciclo","mat","tipo_act","nota","fecha","sem_gen2016","anio_act","ecopuro12","contpuro12","admpuro12","ecocont12","ecoadm12","contadm12","todas12","ident1")]
+
+#Identificador de cursos exonerados, no exonerados, y examenes dados
+aux1<-function(x){
+out<-ifelse("C"%in%x$tipo_act==F & "E"%in%x$tipo_act==T & x$nota>=3,"examen aprobado",
+																										ifelse("C"%in%x$tipo_act==F & "E"%in%x$tipo_act==T & x$nota<3,"examen perdido",
+																											ifelse("C"%in%x$tipo_act==T & "E"%in%x$tipo_act==T & x$nota!=0,"curso exonerado",
+																												ifelse("C"%in%x$tipo_act==T & "E"%in%x$tipo_act==F & x$nota==0,"curso no exonerado",0)
+)
+)
+)
+}
+out1<-dlply(.data=gen2016,.variables=c("ci","mat","fecha"),.fun=aux1,.progress="text",.inform=T)
+dout1<-as.data.frame(unlist(out1))
+dout1$nombre<-row.names(dout1)
+daux1<-as.data.frame(do.call(rbind,strsplit(as.character(dout1$nombre),".",fixed=T)))
+daux1[,3]<-as.integer(substring(as.character(daux1[,3]), 1, 8))
+daux1[,4]<-as.character(dout1[,1])
+colnames(daux1)<-c("ci","mat","fecha","result_act")
+gen2016$ci<-as.character(gen2016$ci)
+gen2016$mat<-as.character(gen2016$mat)
+gen2016$fecha<-as.character(gen2016$fecha)
+daux1$ci<-as.character(daux1$ci)
+daux1$mat<-as.character(daux1$mat)
+daux1$fecha<-as.character(daux1$fecha)
+daux1$ident2<-duplicated(daux1,by=c("ci","mat","fecha"))
+daux1<-daux1[which(daux1$ident2==F),-ncol(daux1)]
+gen2016<-join(gen2016,daux1)
+
+#Identificar las revalidas con nota 20
+gen2016$result_act[which(gen2016$nota==20)]<-rep("Revalida sin nota",length(gen2016$result_act[which(gen2016$nota==20)]))
+#Identificar los trabajos finales de grado plan 2016, que llevan solo C
+gen2016$result_act[which(gen2016$mat=="ITF12")]<-rep("Trabajo Final",length(gen2016$result_act[which(gen2016$mat=="ITF12")]))
+#Identificar cursos con examen obligatorio, donde la nota del C es la de aprobacion 3, y la nota de aprobacion es la del examen.
+
+#Todos los que tienen result_act=0 son cursos no exonerados tambien:
+#table(gen2016$nota[which(duplicated(gen2016[,c("ci","mat","fecha")])==F & gen2016$result_act==0)],gen2016$tipo_act[which(duplicated(gen2016[,c("ci","mat","fecha")])==F & gen2016$result_act==0)])
+gen2016$result_act[which(gen2016$result_act==0)]<-rep("curso no exonerado",length(gen2016$result_act[which(gen2016$result_act==0)]))
+#Identificar todas las UPC
+gen2016$result_act[which(gen2016$mat=="UPC" | gen2016$mat=="UPC10" | gen2016$mat=="UPC15" | gen2016$mat=="UPC20")]<-rep("Practica Curricular",length(gen2016$result_act[which(gen2016$mat=="UPC" | gen2016$mat=="UPC10" | gen2016$mat=="UPC15" | gen2016$mat=="UPC20")]))
+#View(gen2016[which(duplicated(gen2016[,c("ci","mat","fecha")])==F),])
+gen2016$n_estud<-as.factor(gen2016$ci)
+levels(gen2016$n_estud)<-seq(1:length(levels(gen2016$n_estud)))
+write.csv(gen2016[which(duplicated(gen2016[,c("ci","mat","fecha","result_act")])==F),],"gen2016_sindup.csv")
 
 
 
