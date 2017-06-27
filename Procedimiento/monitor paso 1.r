@@ -7,6 +7,7 @@ gen2012<-read.csv("gen2012_sindup.csv")
 gen2013<-read.csv("gen2013_sindup.csv")
 gen2014<-read.csv("gen2014_sindup.csv")
 gen2015<-read.csv("gen2015_sindup.csv")
+gen2016<-read.csv("gen2016_sindup.csv")
 ######################################Retirar info de ci y nombre
 #gen2012<-gen2012[,which(colnames(gen2012)!="ci" & colnames(gen2012)!="NOMBRE")][,-1]
 #gen2013<-gen2013[,which(colnames(gen2013)!="ci" & colnames(gen2013)!="NOMBRE")][,-1]
@@ -17,6 +18,7 @@ gen2012$gen<-rep(2012,nrow(gen2012))
 gen2013$gen<-rep(2013,nrow(gen2013))
 gen2014$gen<-rep(2014,nrow(gen2014))
 gen2015$gen<-rep(2015,nrow(gen2015))
+gen2016$gen<-rep(2016,nrow(gen2016))
 ##### ACA FALTA:
 ###Identificar periodos por separados###
 ######Periodos Generacion 2012####
@@ -97,6 +99,27 @@ gen2015$per_gen2015<-ifelse(gen2015$fecha<=20150808 & gen2015$fecha>20150307,"Ju
 gen2015[which(gen2015$sem_gen2015==4 & gen2015$per_gen2015=="Julio" & gen2015$nota!=20),"per_gen2015"]<-rep("Especial",nrow(gen2015[which(gen2015$sem_gen2015==4 & gen2015$per_gen2015=="Julio" & gen2015$nota!=20),]))
 gen2015[which(gen2015$sem_gen2015==6 & gen2015$per_gen2015=="Julio" & gen2015$nota!=20),"per_gen2015"]<-rep("Especial",nrow(gen2015[which(gen2015$sem_gen2015==6 & gen2015$per_gen2015=="Julio" & gen2015$nota!=20),]))																		
 gen2015[which(gen2015$result_act=="Revalida sin nota" | gen2015$result_act=="Trabajo Final" | gen2015$result_act=="Practica Curricular"),"per_gen2015"]<-rep("Especial",nrow(gen2015[which(gen2015$result_act=="Revalida sin nota" | gen2015$result_act=="Trabajo Final" | gen2015$result_act=="Practica Curricular"),]))
+######Periodos Generacion 2016####
+#Usando las mismas fechas que para 2012
+gen2016$per_gen2016<-ifelse(gen2016$fecha<=20160803 & gen2016$fecha>20160309,"Julio",
+										ifelse(gen2016$fecha<=20161221 & gen2016$fecha>20160803,"Diciembre",
+											ifelse(gen2016$fecha<=20140213 & gen2016$fecha>20161221,"Febrero",
+												ifelse(gen2016$fecha<=20140308 & gen2016$fecha>20140213,"Marzo",
+													ifelse(gen2016$fecha<=20140804 & gen2016$fecha>20140308,"Julio",
+														ifelse(gen2016$fecha<=20141222 & gen2016$fecha>20140804,"Diciembre",
+															ifelse(gen2016$fecha<=20150214 & gen2016$fecha>20141222,"Febrero",
+																ifelse(gen2016$fecha<=20150307 & gen2016$fecha>20150214,"Marzo",
+																	ifelse(gen2016$fecha<=20150808 & gen2016$fecha>20150307,"Julio",
+																		ifelse(gen2016$fecha<=20151223 & gen2016$fecha>20150808,"Diciembre",
+																			ifelse(gen2016$fecha<=20160213 & gen2016$fecha>20151223,"Febrero",
+																				ifelse(gen2016$fecha<=20160305 & gen2016$fecha>20160213,"Marzo",
+																					ifelse(gen2016$fecha<=20160806 & gen2016$fecha>20160305, "Julio",
+																						ifelse(gen2016$fecha<=20161222 & gen2016$fecha>20160806,"Diciembre","NC"))))))))))))))
+#Casos especiales (mesas especiales, reconocimiento de creditos, revalidas, todo actividades no dentro de un periodo de examenes y revisiones):
+#table(gen2012$sem_gen2012,gen2012$per_gen2012)
+gen2016[which(gen2016$sem_gen2016==4 & gen2016$per_gen2016=="Julio" & gen2016$nota!=20),"per_gen2016"]<-rep("Especial",nrow(gen2016[which(gen2016$sem_gen2016==4 & gen2016$per_gen2016=="Julio" & gen2016$nota!=20),]))
+gen2016[which(gen2016$sem_gen2016==6 & gen2016$per_gen2016=="Julio" & gen2016$nota!=20),"per_gen2016"]<-rep("Especial",nrow(gen2016[which(gen2016$sem_gen2016==6 & gen2016$per_gen2016=="Julio" & gen2016$nota!=20),]))																		
+gen2016[which(gen2016$result_act=="Revalida sin nota" | gen2016$result_act=="Trabajo Final" | gen2016$result_act=="Practica Curricular"),"per_gen2016"]<-rep("Especial",nrow(gen2016[which(gen2016$result_act=="Revalida sin nota" | gen2016$result_act=="Trabajo Final" | gen2016$result_act=="Practica Curricular"),]))
 ###Identificador unico por UC, variable con nombre de UC
 materias<-read.csv("C:\\Users\\msilva\\Documents\\Mathias\\Bases\\Bases\\FCEA\\Actividades actualizadas\\materias.csv",sep=";")
 colnames(materias)[which(colnames(materias)=="MAT")]<-"mat"
@@ -104,10 +127,12 @@ gen2012<-join(gen2012,materias[,c("MATST","mat","NOMMAT")],c("mat"))
 gen2013<-join(gen2013,materias[,c("MATST","mat","NOMMAT")],c("mat"))
 gen2014<-join(gen2014,materias[,c("MATST","mat","NOMMAT")],c("mat"))
 gen2015<-join(gen2015,materias[,c("MATST","mat","NOMMAT")],c("mat"))
+gen2016<-join(gen2016,materias[,c("MATST","mat","NOMMAT")],c("mat"))
 write.csv(gen2012,"gen2012_sindup.csv")
 write.csv(gen2013,"gen2013_sindup.csv")
 write.csv(gen2014,"gen2014_sindup.csv")
 write.csv(gen2015,"gen2015_sindup.csv")
+write.csv(gen2016,"gen2016_sindup.csv")
 ######
 #Resumen de result_act por UC-fecha
 #aux1<-function(x){
